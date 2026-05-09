@@ -3,7 +3,7 @@
 resources:
   jobs:
     Ajay_Flight_Job:
-      name: Ajay_Flight_Job
+      name: Ajay_Flight_Job_via_CICD
 
       trigger:
         periodic:
