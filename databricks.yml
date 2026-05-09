@@ -1,0 +1,37 @@
+# This is a Databricks asset bundle definition for Ajay_Flight_Bundle.
+# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+bundle:
+  name: Ajay_Flight_Bundle
+  uuid: 608a4bd8-95a8-4ada-b654-eb61f21de4d8
+
+include:
+  - resources/*.yml
+
+# Variable declarations. These variables are assigned in the dev/prod targets below.
+variables:
+  catalog:
+    description: The catalog to use
+  schema:
+    description: The schema to use
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://adb-7405614357178703.3.azuredatabricks.net
+    variables:
+      catalog: dev_team
+      schema: testing
+
+  prod:
+    mode: production
+    workspace:
+      host: https://adb-7405609168043068.8.azuredatabricks.net
+      root_path: /Workspace/Users/pendemajay94@gmail.com/.bundle/${bundle.name}/${bundle.target}
+    variables:
+      catalog: prod
+      schema: default
+    permissions:
+      - user_name: pendemajay94@gmail.com
+        level: CAN_MANAGE

@@ -1,0 +1,45 @@
+# Ajay Flight Bundle - Job Definition
+
+resources:
+  jobs:
+    Ajay_Flight_Job:
+      name: Ajay_Flight_Job
+
+      trigger:
+        periodic:
+          interval: 1
+          unit: DAYS
+
+      parameters:
+        - name: catalog
+          default: ${var.catalog}
+        - name: schema
+          default: ${var.schema}
+
+      tasks:
+        - task_key: Ajay_API_to_Raw
+          notebook_task:
+            notebook_path: ../src/notebooks/Ajay_01_api_to_raw_file.ipynb
+
+        - task_key: Ajay_Raw_to_Bronze
+          depends_on:
+            - task_key: Ajay_API_to_Raw
+          notebook_task:
+            notebook_path: ../src/notebooks/Ajay_02_raw_file_to_bronze.ipynb
+
+        - task_key: Ajay_Bronze_to_Silver
+          depends_on:
+            - task_key: Ajay_Raw_to_Bronze
+          notebook_task:
+            notebook_path: ../src/notebooks/Ajay_03_bronze_to_silver.ipynb
+
+        - task_key: Ajay_Silver_to_Gold
+          depends_on:
+            - task_key: Ajay_Bronze_to_Silver
+          notebook_task:
+            notebook_path: ../src/notebooks/Ajay_04_silver_to_gold.ipynb
+
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "4"
